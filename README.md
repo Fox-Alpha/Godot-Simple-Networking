@@ -1,3 +1,23 @@
+## My ideas
+- Server
+  - make it easy to identify the server Window
+  - make the Kick Buttopn functional
+  
+- Ingame Menu
+  - Make ESC show the Menu for quitting the Game
+  
+- Spawn
+  - Different für RED and BLUE Team
+  
+- Chat
+  - Focus the input mask when opened
+  - Show the Playername when joining/leaving
+  - Make a key to show Chat
+  
+- Fix Debug Warnings
+
+
+
 # Godot Simple Networking
 
 A simple networking base template you can use in your Godot project.
