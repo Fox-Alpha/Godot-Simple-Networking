@@ -9,7 +9,7 @@ var enter_key_pressed = false
 
 func _process(_delta):
 	display_players_connected(%LobbyConnectedPlayers)
-	if multiplayer.is_server():
+	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
 		display_players_connected(%PlayersConnectedList)
 
 func _ready():
@@ -46,6 +46,7 @@ func _input(_event):
 				%ChatBoxDisapearsTimer.start()
 			else:
 				%ChatBox.show()
+				%TypedMessage.grab_focus()
 				%ChatBoxDisapearsTimer.stop()
 	else:
 		enter_key_pressed = false
