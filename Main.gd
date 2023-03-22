@@ -115,8 +115,14 @@ func _on_host_button_pressed():
 	multiplayer.multiplayer_peer = peer
 
 	multiplayer.peer_disconnected.connect(remove_player)
+	multiplayer.peer_connected.connect(player_joined)
 
 	load_game()
+
+
+func player_joined(id):
+	pass
+
 
 # Client
 
@@ -128,8 +134,14 @@ func _on_join_button_pressed():
 		%Username.text = "Player"
 
 	multiplayer.server_disconnected.connect(server_offline)
+	multiplayer.connected_to_server.connect(server_connected)
 
 	load_game()
+
+
+func server_connected():
+	pass
+
 
 @rpc("any_peer")
 func add_player(id, team):
