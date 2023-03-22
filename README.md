@@ -1,20 +1,20 @@
 ## My ideas
 - Server
-  - make it easy to identify the server Window
-  - make the Kick Buttopn functional
+  - make it easy to identify the server Window [#1](../../issues/1)
+  - make the Kick Buttopn functional [#2](../../issues/2)
   
 - Ingame Menu
-  - Make ESC show the Menu for quitting the Game
+  - Make ESC show the Menu for quitting the Game [#3](../../issues/3)
   
 - Spawn
-  - Different für RED and BLUE Team
+  - Different für RED and BLUE Team [#4](../../issues/4)
   
 - Chat
-  - Focus the input mask when opened
-  - Show the Playername when joining/leaving
-  - Make a key to show Chat
+  - Focus the input mask when opened [#5](../../issues/5)
+  - Show the Playername when joining/leaving [#6](../../issues/6)
+  - Make a key to show Chat [#7](../../issues/7)
   
-- Fix Debug Warnings
+- Fix Debug Warnings [#8](../../issues/8)
 
 
 
