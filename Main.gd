@@ -7,7 +7,7 @@ var peer = ENetMultiplayerPeer.new()
 
 var enter_key_pressed = false
 
-func _process(delta):
+func _process(_delta):
 	display_players_connected(%LobbyConnectedPlayers)
 
 func _ready():
@@ -22,7 +22,7 @@ func _ready():
 
 # Hold the Tab key to display connected players and press Enter to send a message
 
-func _input(event):
+func _input(_event):
 	if %Menu.visible: return # If the starting menu is not visible it means we are in the game
 
 	if Input.is_key_pressed(KEY_TAB):
@@ -152,7 +152,7 @@ func remove_player(id):
 func server_offline():
 	quit_game()
 
-func _on_username_text_submitted(new_text):
+func _on_username_text_submitted(_new_text):
 	_on_join_button_pressed()
 
 func _on_chat_box_disapears_timer_timeout():
