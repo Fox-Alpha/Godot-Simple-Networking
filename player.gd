@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var team = "red"
+@export var team := Color.RED
 
 func _ready():
 	pass
@@ -16,7 +16,7 @@ func _spawn_custom() -> void:
 func _on_tree_entered():
 	set_multiplayer_authority(str(name).to_int())
 
-	$Authority.visible = is_multiplayer_authority()
+	%Authority.visible = is_multiplayer_authority()
 
 	if not is_multiplayer_authority(): return
 #	if team == "red":
@@ -24,5 +24,5 @@ func _on_tree_entered():
 #	else:
 #		$Sprite2D.modulate = Color.CYAN
 
-	$PlayerName.text = get_tree().get_first_node_in_group("player_name").text
-	$PlayerName.modulate = Color(0, 1, 0)
+	%PlayerName.text = get_tree().get_first_node_in_group("player_name").text
+	%PlayerName.modulate = Color(0, 1, 0)
