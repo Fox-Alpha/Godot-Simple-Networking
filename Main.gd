@@ -3,6 +3,8 @@ extends Node
 var player = preload("res://player.tscn")
 var map = preload("res://map.tscn")
 
+var playerdata : Dictionary = { "Team_Blue": {}, "Team_Red": {} }
+
 var peer = ENetMultiplayerPeer.new()
 
 var enter_key_pressed = false
