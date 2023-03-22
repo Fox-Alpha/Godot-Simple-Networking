@@ -9,6 +9,8 @@ var enter_key_pressed = false
 
 func _process(_delta):
 	display_players_connected(%LobbyConnectedPlayers)
+	if multiplayer.is_server():
+		display_players_connected(%PlayersConnectedList)
 
 func _ready():
 	$Control/Menu.show()
@@ -25,11 +27,12 @@ func _ready():
 func _input(_event):
 	if %Menu.visible: return # If the starting menu is not visible it means we are in the game
 
-	if Input.is_key_pressed(KEY_TAB):
-		display_players_connected(%PlayersConnectedList)
-		%Scoreboard.show()
-	else:
-		%Scoreboard.hide()
+	if not multiplayer.is_server():
+		if Input.is_key_pressed(KEY_TAB):
+			display_players_connected(%PlayersConnectedList)
+			%Scoreboard.show()
+		else:
+			%Scoreboard.hide()
 
 	if Input.is_key_pressed(KEY_ENTER) or Input.is_key_pressed(KEY_KP_ENTER):
 		if not enter_key_pressed:
@@ -142,6 +145,10 @@ func load_game():
 	%MapInstance.add_child(map_instance)
 	
 	$Control/Lobby.visible = !multiplayer.is_server()
+	
+	if multiplayer.is_server():
+		display_players_connected(%PlayersConnectedList)
+		%Scoreboard.show()
 
 func remove_player(id):
 	var _player = %SpawnPosition.get_node_or_null(str(id))
