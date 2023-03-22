@@ -89,7 +89,7 @@ func display_players_connected(node):
 		label.queue_free()
 
 	# Create the list of connected players
-	for peer in %SpawnPosition.get_children():
+	for _peer in %SpawnPosition.get_children():
 		var HBox = HBoxContainer.new()
 		node.add_child(HBox)
 
@@ -98,9 +98,9 @@ func display_players_connected(node):
 			button.text = "KICK"
 			HBox.add_child(button)
 
-		var player = Label.new()
-		player.text = str(peer.name)
-		HBox.add_child(player)
+		var lblplayer = Label.new()
+		lblplayer.text = str(_peer.name)
+		HBox.add_child(lblplayer)
 
 # Networking system
 
@@ -144,8 +144,8 @@ func load_game():
 	$Control/Lobby.visible = !multiplayer.is_server()
 
 func remove_player(id):
-	var player = %SpawnPosition.get_node_or_null(str(id))
-	player.queue_free()
+	var _player = %SpawnPosition.get_node_or_null(str(id))
+	_player.queue_free()
 
 	send_message.rpc(str(id), " left the game", false)
 
