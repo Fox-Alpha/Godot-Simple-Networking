@@ -219,8 +219,9 @@ func add_player(id, team):
 	player_instance.name = str(id)
 	player_instance.team = team
 	%SpawnPosition.add_child(player_instance)
-	_on_server_display_players_connected(team)
-	send_message.rpc(str(id), " has joined the game", false)
+	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
+		_on_server_display_players_connected(team)
+		send_message.rpc(str(id), " has joined the game", false)
 
 func load_game():
 	%Menu.hide()
@@ -230,7 +231,7 @@ func load_game():
 	$Control/Lobby.visible = !multiplayer.is_server()
 	
 	if multiplayer.is_server():
-		display_players_connected(%PlayersConnectedListTeamBlue)
+#		display_players_connected(%PlayersConnectedListTeamBlue)
 		%Scoreboard.show()
 
 func remove_player(id):
