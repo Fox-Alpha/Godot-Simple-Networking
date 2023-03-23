@@ -134,14 +134,21 @@ layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Control/Lobby/MarginContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Connected:"
 
-[node name="LobbyConnectedPlayers" type="VBoxContainer" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LobbyConnectedPlayers" type="VBoxContainer" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Scoreboard" type="PanelContainer" parent="Control"]
 unique_name_in_owner = true
@@ -285,6 +292,7 @@ unique_name_in_owner = true
 wait_time = 5.0
 one_shot = true
 
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/SpawnTeamRedButton" to="." method="_on_spawn_team_red_button_pressed"]
 [connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/SpawnTeamBlueButton" to="." method="_on_spawn_team_blue_button_pressed"]
 [connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]
