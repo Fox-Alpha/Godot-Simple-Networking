@@ -91,7 +91,7 @@ func send_message(player_name, message, is_server):
 	%ChatBoxDisapearsTimer.start()
 
 # Function to display players connected, it refreshes each time it is called on Server
-func _on_server_display_players_connected() -> void:
+func _on_server_display_players_connected(team : String) -> void:
 	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		if  multiplayer.is_server():
 			if multiplayer.has_multiplayer_peer():
@@ -100,6 +100,9 @@ func _on_server_display_players_connected() -> void:
 				for p in peerlist:
 					# peer bereits in liste
 					if %PlayersConnectedListTeamBlue.get_node_or_null(str(p)) != null: #.find_child(str(p)):
+						continue
+					
+					if %PlayersConnectedListTeamRed.get_node_or_null(str(p)) != null: #.find_child(str(p)):
 						continue
 						
 					var HBox := HBoxContainer.new()
@@ -118,11 +121,15 @@ func _on_server_display_players_connected() -> void:
 					button.set_meta("p_id", p)
 					button.pressed.connect(_on_player_kick_pressed.bind(button))
 					HBox.add_child(button)
-
-					# BLUE Team
-					%PlayersConnectedListTeamBlue.add_child(HBox)
 					
+					match team:
+					# BLUE Team
+						"blue":
+							%PlayersConnectedListTeamBlue.add_child(HBox)
 					# RED Team
+						"red":
+							%PlayersConnectedListTeamRed.add_child(HBox)
+					
 					# %PlayersConnectedListTeamRed
 		pass
 
@@ -212,7 +219,7 @@ func add_player(id, team):
 	player_instance.name = str(id)
 	player_instance.team = team
 	%SpawnPosition.add_child(player_instance)
-	_on_server_display_players_connected()
+	_on_server_display_players_connected(team)
 	send_message.rpc(str(id), " has joined the game", false)
 
 func load_game():
@@ -233,6 +240,11 @@ func remove_player(id):
 	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
 	if pnode != null:
 		pnode.queue_free()
+	else:
+		pnode = %PlayersConnectedListTeamRed.get_node_or_null(str(id))
+		if (pnode != null):
+			pnode.queue_free()
+		
 		
 
 	send_message.rpc(str(id), " left the game", false)
