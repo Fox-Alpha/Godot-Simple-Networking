@@ -98,14 +98,32 @@ func _on_server_display_players_connected() -> void:
 				var peerlist = multiplayer.get_peers()
 				
 				for p in peerlist:
+					# peer bereits in liste
+					if %PlayersConnectedListTeamBlue.get_node_or_null(str(p)) != null: #.find_child(str(p)):
+						continue
+						
+					var HBox := HBoxContainer.new()
+					HBox.name = str(p)
+					HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+					# node.add_child(HBox)
+					
+					var lblplayer = Label.new()
+					lblplayer.text = str(p)
+					lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+					HBox.add_child(lblplayer)
 					
 					var button = Button.new()
 					button.text = "KICK"
 					button.name = str(p)
-					button.set_meta("p_id",p)
-					button.pressed.connect(_on_player_kick_pressed)
-#					HBox.add_child(button)
-				
+					button.set_meta("p_id", p)
+					button.pressed.connect(_on_player_kick_pressed.bind(button))
+					HBox.add_child(button)
+
+					# BLUE Team
+					%PlayersConnectedListTeamBlue.add_child(HBox)
+					
+					# RED Team
+					# %PlayersConnectedListTeamRed
 		pass
 
 
@@ -144,10 +162,14 @@ func display_players_connected(node : Node):
 # Networking system
 
 # Server
-func _on_player_kick_pressed(_p_id : int = 1):
-#	peer.disconnect_peer(p)
-	print_debug("Player Kicked ", _p_id)
-	pass
+func _on_player_kick_pressed(butt):
+#	var metavar : PackedStringArray = butt.get_meta_list()
+	
+#	for m in metavar:
+	var m : int = butt.get_meta("p_id")
+#	print_debug("Player Kicked ", m)
+	peer.disconnect_peer(m)
+#	pass
 
 
 func _on_host_button_pressed():
@@ -190,7 +212,7 @@ func add_player(id, team):
 	player_instance.name = str(id)
 	player_instance.team = team
 	%SpawnPosition.add_child(player_instance)
-
+	_on_server_display_players_connected()
 	send_message.rpc(str(id), " has joined the game", false)
 
 func load_game():
@@ -207,6 +229,11 @@ func load_game():
 func remove_player(id):
 	var _player = %SpawnPosition.get_node_or_null(str(id))
 	_player.queue_free()
+	
+	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
+	if pnode != null:
+		pnode.queue_free()
+		
 
 	send_message.rpc(str(id), " left the game", false)
 
