@@ -10,9 +10,10 @@ var peer = ENetMultiplayerPeer.new()
 var enter_key_pressed = false
 
 func _process(_delta):
-	display_players_connected(%LobbyConnectedPlayers)
-	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
-		display_players_connected(%PlayersConnectedList)
+	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		display_players_connected(%LobbyConnectedPlayers)
+		if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
+			display_players_connected(%PlayersConnectedList)
 
 func _ready():
 	$Control/Menu.show()
@@ -137,6 +138,7 @@ func _on_join_button_pressed():
 
 	multiplayer.server_disconnected.connect(server_offline)
 	multiplayer.connected_to_server.connect(server_connected)
+	
 
 	load_game()
 
@@ -207,3 +209,14 @@ func quit_game():
 
 func _on_menu_button_pressed():
 	quit_game()
+
+
+func _on_tree_exiting():
+	if multiplayer.has_multiplayer_peer():
+		if not multiplayer.is_server():
+			peer.close()
+			# .close_connection ( 100 )
+		else:
+			for p in multiplayer.get_peers():
+				peer.disconnect_peer(p)
+	pass # Replace with function body.
