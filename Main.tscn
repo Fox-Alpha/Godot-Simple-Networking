@@ -180,24 +180,24 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainerHeader" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainerHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Players BLUE Team:"
 
-[node name="Label2" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainerHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Players RED Team:"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer" groups=["BLUE", "RED"]]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PlayersConnectedList" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayersConnectedListTeamBlue" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -205,7 +205,7 @@ size_flags_horizontal = 3
 [node name="VSeparator" type="VSeparator" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="PlayersConnectedList2" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayersConnectedListTeamRed" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

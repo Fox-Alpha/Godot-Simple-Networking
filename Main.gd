@@ -11,9 +11,11 @@ var enter_key_pressed = false
 
 func _process(_delta):
 	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
-		display_players_connected(%LobbyConnectedPlayers)
+		if %LobbyConnectedPlayers.visible:
+			display_players_connected(%LobbyConnectedPlayers)
 		if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
-			display_players_connected(%PlayersConnectedList)
+			#display_players_connected(%PlayersConnectedListTeamBlue)
+			pass
 
 func _ready():
 	$Control/Menu.show()
@@ -32,7 +34,7 @@ func _input(_event):
 
 	if not multiplayer.is_server():
 		if Input.is_key_pressed(KEY_TAB):
-			display_players_connected(%PlayersConnectedList)
+			display_players_connected(%PlayersConnectedListTeamBlue)
 			%Scoreboard.show()
 		else:
 			%Scoreboard.hide()
@@ -88,30 +90,65 @@ func send_message(player_name, message, is_server):
 	%ChatBox.show()
 	%ChatBoxDisapearsTimer.start()
 
-# Function to display players connected, it refreshes each time it is called
+# Function to display players connected, it refreshes each time it is called on Server
+func _on_server_display_players_connected() -> void:
+	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		if  multiplayer.is_server():
+			if multiplayer.has_multiplayer_peer():
+				var peerlist = multiplayer.get_peers()
+				
+				for p in peerlist:
+					
+					var button = Button.new()
+					button.text = "KICK"
+					button.name = str(p)
+					button.set_meta("p_id",p)
+					button.pressed.connect(_on_player_kick_pressed)
+#					HBox.add_child(button)
+				
+		pass
 
-func display_players_connected(node):
+
+# Function to display players connected, it refreshes each time it is called on Clients
+
+func display_players_connected(node : Node):
 	# Clear the previous list
-	for label in node.get_children():
-		label.queue_free()
+	if multiplayer.is_server():
+		return
+		
+	for c in node.get_children():
+		c.queue_free()
+		
 
 	# Create the list of connected players
+	# TODO: peerliste aus MultioplayerAPI verwenden
 	for _peer in %SpawnPosition.get_children():
-		var HBox = HBoxContainer.new()
+		var HBox := HBoxContainer.new()
+		HBox.name = str(_peer.name)
+		HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		node.add_child(HBox)
 
-		if multiplayer.is_server():
-			var button = Button.new()
-			button.text = "KICK"
-			HBox.add_child(button)
 
 		var lblplayer = Label.new()
 		lblplayer.text = str(_peer.name)
+		lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		HBox.add_child(lblplayer)
 
+#		if multiplayer.is_server():
+#			var button = Button.new()
+#			button.text = "KICK"
+#			button.name = str(_peer.name)
+#			button.set_meta("p_id", int(_peer.name))
+#			button.pressed.connect(_on_player_kick_pressed)
+#			HBox.add_child(button)
 # Networking system
 
 # Server
+func _on_player_kick_pressed(_p_id : int = 1):
+#	peer.disconnect_peer(p)
+	print_debug("Player Kicked ", _p_id)
+	pass
+
 
 func _on_host_button_pressed():
 	peer.create_server(9999)
@@ -123,7 +160,7 @@ func _on_host_button_pressed():
 	load_game()
 
 
-func player_joined(id):
+func player_joined(_id):
 	pass
 
 
@@ -164,7 +201,7 @@ func load_game():
 	$Control/Lobby.visible = !multiplayer.is_server()
 	
 	if multiplayer.is_server():
-		display_players_connected(%PlayersConnectedList)
+		display_players_connected(%PlayersConnectedListTeamBlue)
 		%Scoreboard.show()
 
 func remove_player(id):
