@@ -147,25 +147,20 @@ func display_players_connected(node : Node):
 
 	# Create the list of connected players
 	# TODO: peerliste aus MultioplayerAPI verwenden
-	for _peer in %SpawnPosition.get_children():
+	var _plist : Array[Node] = %SpawnPosition/Blue.get_children()
+	_plist.append_array(%SpawnPosition/Red.get_children())
+	
+	for _peer in _plist:
 		var HBox := HBoxContainer.new()
 		HBox.name = str(_peer.name)
 		HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		node.add_child(HBox)
-
 
 		var lblplayer = Label.new()
 		lblplayer.text = str(_peer.name)
 		lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		HBox.add_child(lblplayer)
 
-#		if multiplayer.is_server():
-#			var button = Button.new()
-#			button.text = "KICK"
-#			button.name = str(_peer.name)
-#			button.set_meta("p_id", int(_peer.name))
-#			button.pressed.connect(_on_player_kick_pressed)
-#			HBox.add_child(button)
 # Networking system
 
 # Server
@@ -218,10 +213,18 @@ func add_player(id, team):
 	var player_instance = player.instantiate()
 	player_instance.name = str(id)
 	player_instance.team = team
-	%SpawnPosition.add_child(player_instance)
+	var pname = player_instance.get_node("ReferenceRect/PlayerName").text
+
+	match team:
+		"blue":
+			%SpawnPosition/Blue.add_child(player_instance)
+		"red":
+			%SpawnPosition/Red.add_child(player_instance)
+			
 	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
 		_on_server_display_players_connected(team)
-		send_message.rpc(str(id), " has joined the game", false)
+		# "User {} is {}.".format([42, "Godot"], "{}")
+		send_message.rpc(str(id), " ({} / {}) has joined the game".format([pname, team.capitalize()], "{}"), false)
 
 func load_game():
 	%Menu.hide()
@@ -235,16 +238,18 @@ func load_game():
 		%Scoreboard.show()
 
 func remove_player(id):
-	var _player = %SpawnPosition.get_node_or_null(str(id))
-	_player.queue_free()
 	
 	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
 	if pnode != null:
 		pnode.queue_free()
+		var _player = %SpawnPosition/Blue.get_node_or_null(str(id))
+		_player.queue_free()
 	else:
 		pnode = %PlayersConnectedListTeamRed.get_node_or_null(str(id))
 		if (pnode != null):
 			pnode.queue_free()
+			var _player = %SpawnPosition/Red.get_node_or_null(str(id))
+			_player.queue_free()
 		
 		
 
@@ -306,5 +311,3 @@ func _on_button_pin_box_toggled(button_pressed):
 		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "Pinned"
 	else:
 		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "unPinned"
-		
-	pass # Replace with function body.
