@@ -245,19 +245,19 @@ func remove_player(id):
 		var _player = %SpawnPosition/Blue.get_node_or_null(str(id))
 		var pname = _player.get_node("ReferenceRect/PlayerName").text
 		_player.queue_free()
-		send_message.rpc(str(id), " ({} / {}) has joined the game".format([pname, "Blue".capitalize()], "{}"), false)
+		send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Blue".capitalize()], "{}"), false)
 	else:
 		pnode = %PlayersConnectedListTeamRed.get_node_or_null(str(id))
 		if (pnode != null):
 			pnode.queue_free()
 			var _player = %SpawnPosition/Red.get_node_or_null(str(id))
 			var pname = _player.get_node("ReferenceRect/PlayerName").text
-			send_message.rpc(str(id), " ({} / {}) has joined the game".format([pname, "Red".capitalize()], "{}"), false)
+			send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Red".capitalize()], "{}"), false)
 			_player.queue_free()
 		
 		
 
-	send_message.rpc(str(id), " left the game", false)
+	# send_message.rpc(str(id), " left the game", false)
 
 func server_offline():
 	quit_game()
