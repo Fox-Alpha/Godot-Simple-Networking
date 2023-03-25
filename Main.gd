@@ -297,3 +297,17 @@ func _on_tree_exiting():
 			for p in multiplayer.get_peers():
 				peer.disconnect_peer(p)
 	pass # Replace with function body.
+
+
+func _on_button_pin_box_toggled(button_pressed):
+	if button_pressed:
+		$ChatBoxDisapearsTimer.start()
+	else:
+		$ChatBoxDisapearsTimer.stop()
+	
+	if $ChatBoxDisapearsTimer.is_stopped():
+		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "Pinned"
+	else:
+		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "unPinned"
+		
+	pass # Replace with function body.

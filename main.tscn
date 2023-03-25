@@ -29,7 +29,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -203.0
-offset_right = 350.0
+offset_right = 413.0
 offset_bottom = 227.0
 grow_vertical = 0
 
@@ -42,49 +42,23 @@ theme_override_constants/margin_bottom = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/ChatBox/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 5
 
-[node name="Button" type="Button" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
+theme_override_constants/separation = 5
+
+[node name="ButtonPinBox" type="Button" parent="Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+toggle_mode = true
 text = "PIN"
 
 [node name="DisplayedMessage" type="VBoxContainer" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="SendMessage" type="PanelContainer" parent="Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -207.0
-offset_top = -41.0
-offset_right = 207.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/SendMessage"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/SendMessage/MarginContainer"]
-layout_mode = 2
-
-[node name="Info" type="Label" parent="Control/SendMessage/MarginContainer/HBoxContainer"]
-layout_mode = 2
-text = "Say : "
-
-[node name="TypedMessage" type="LineEdit" parent="Control/SendMessage/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(350, 0)
-layout_mode = 2
-max_length = 35
+size_flags_vertical = 3
 
 [node name="Lobby" type="PanelContainer" parent="Control"]
 unique_name_in_owner = true
@@ -162,16 +136,12 @@ size_flags_vertical = 3
 [node name="Scoreboard" type="PanelContainer" parent="Control"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -384.0
-offset_top = -256.0
-offset_right = 384.0
-offset_bottom = 256.0
-grow_horizontal = 2
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -729.0
+grow_horizontal = 0
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/Scoreboard"]
@@ -297,6 +267,42 @@ layout_mode = 2
 layout_mode = 2
 text = "Quit game"
 
+[node name="SendMessage" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+z_index = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -576.0
+offset_top = -248.0
+offset_right = -162.0
+offset_bottom = -207.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/SendMessage"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/SendMessage/MarginContainer"]
+layout_mode = 2
+
+[node name="Info" type="Label" parent="Control/SendMessage/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Say : "
+
+[node name="TypedMessage" type="LineEdit" parent="Control/SendMessage/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+max_length = 35
+
 [node name="QuitConfirmation" type="PanelContainer" parent="Control"]
 visible = false
 layout_mode = 1
@@ -350,6 +356,7 @@ wait_time = 5.0
 one_shot = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="toggled" from="Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox" to="." method="_on_button_pin_box_toggled"]
 [connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/SpawnTeamRedButton" to="." method="_on_spawn_team_red_button_pressed"]
 [connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/SpawnTeamBlueButton" to="." method="_on_spawn_team_blue_button_pressed"]
 [connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]
