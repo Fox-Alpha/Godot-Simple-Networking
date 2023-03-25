@@ -40,7 +40,15 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="DisplayedMessage" type="VBoxContainer" parent="Control/ChatBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ChatBox/MarginContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "PIN"
+
+[node name="DisplayedMessage" type="VBoxContainer" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
