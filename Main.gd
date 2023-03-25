@@ -300,12 +300,9 @@ func _on_tree_exiting():
 
 
 func _on_button_pin_box_toggled(button_pressed):
-	if button_pressed:
-		$ChatBoxDisapearsTimer.start()
-	else:
-		$ChatBoxDisapearsTimer.stop()
+	%ChatBoxDisapearsTimer.paused = button_pressed
 	
-	if $ChatBoxDisapearsTimer.is_stopped():
+	if $ChatBoxDisapearsTimer.paused:
 		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "Pinned"
 	else:
 		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "unPinned"
