@@ -1,5 +1,7 @@
 extends Node
 
+signal server_created
+
 var player = preload("res://player.tscn")
 var map = preload("res://map.tscn")
 
@@ -26,6 +28,8 @@ func _ready():
 	%Scoreboard.hide()
 	$Control/Lobby.hide()
 	$Control/QuitConfirmation.hide()
+
+	server_created.connect(_on_server_created)
 
 # Hold the Tab key to display connected players and press Enter to send a message
 
@@ -61,8 +65,12 @@ func _input(_event):
 		%TypedMessage.text = ""
 		%ChatBoxDisapearsTimer.start()
 
-# Function to send a message
 
+func _on_server_created():
+	add_player.rpc_id(1, multiplayer.multiplayer_peer.generate_unique_id(), "host")
+
+
+# Function to send a message
 @rpc("call_local", "any_peer")
 func send_message(player_name, message, is_server):
 	var HBox = HBoxContainer.new()
@@ -175,7 +183,10 @@ func _on_player_kick_pressed(butt):
 
 
 func _on_host_button_pressed():
-	peer.create_server(9999)
+	if peer.create_server(9999) != OK:
+		print("Create Server failed !")
+		return
+
 	multiplayer.multiplayer_peer = peer
 
 	multiplayer.peer_disconnected.connect(remove_player)
@@ -183,8 +194,12 @@ func _on_host_button_pressed():
 
 	load_game()
 
+	server_created.emit()
 
-func player_joined(_id):
+
+
+func player_joined(id):
+	print("Player_Joined() : " + str(id))
 	pass
 
 
@@ -212,7 +227,7 @@ func server_connected():
 	pass
 
 
-@rpc("any_peer")
+@rpc("call_local", "any_peer")
 func add_player(id, team):
 	var player_instance = player.instantiate()
 	player_instance.name = str(id)
@@ -230,7 +245,9 @@ func add_player(id, team):
 			%SpawnPosition/Red.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.ORANGE_RED
 		"host":
-			multiplayer.multiplayer_peer.generate_unique_id()
+			var uuid : int = multiplayer.multiplayer_peer.generate_unique_id()
+			player_instance.team = Color.SEA_GREEN
+			%SpawnPosition/Host.add_child(player_instance)
 
 	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
 		_on_server_display_players_connected(team)
@@ -310,12 +327,14 @@ func _on_menu_button_pressed():
 
 func _on_tree_exiting():
 	if multiplayer.has_multiplayer_peer():
+		var peers = multiplayer.get_peers()
 		if not multiplayer.is_server():
-			peer.close()
-			# .close_connection ( 100 )
-		else:
-			for p in multiplayer.get_peers():
+			for p in peers:
 				peer.disconnect_peer(p)
+				# .close_connection ( 100 )
+		else:
+			peer.close()
+		peer = null
 	pass # Replace with function body.
 
 
