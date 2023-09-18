@@ -66,7 +66,6 @@ metadata/_edit_lock_ = true
 
 [node name="PlayerName" type="Label" parent="ReferenceRect"]
 unique_name_in_owner = true
-self_modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 1
 anchors_preset = 7
