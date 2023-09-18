@@ -15,6 +15,12 @@ func _spawn_custom() -> void:
 
 func _on_tree_entered():
 	$ReferenceRect/TeamColor.color = team
+#	set_multiplayer_authority(str(name).to_int())
+
+	print("str_name: %s / mp_uid: %d" % [str(name), multiplayer.get_unique_id()])
+#	if str(name).to_int() == multiplayer.get_unique_id():
+#		var mp_uid = multiplayer.get_unique_id()
+
 	set_multiplayer_authority(str(name).to_int())
 
 	%Authority.visible = is_multiplayer_authority()
