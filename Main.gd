@@ -229,6 +229,8 @@ func add_player(id, team):
 			player_instance.team = Color.ORANGE_RED
 			%SpawnPosition/Red.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.ORANGE_RED
+		"host":
+			multiplayer.multiplayer_peer.generate_unique_id()
 
 	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
 		_on_server_display_players_connected(team)
