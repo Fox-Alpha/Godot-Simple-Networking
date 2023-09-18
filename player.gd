@@ -1,12 +1,14 @@
 extends CharacterBody2D
 
 @export var team : Color
+var multiplayerauthority : int = -1
 
 func _ready():
 	pass
 
 func _physics_process(_delta):
-	if not is_multiplayer_authority(): return
+#	if not is_multiplayer_authority() and
+	if get_multiplayer_authority() != multiplayerauthority: return
 	velocity = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") * 500
 	move_and_slide()
 
@@ -22,6 +24,7 @@ func _on_tree_entered():
 #		var mp_uid = multiplayer.get_unique_id()
 
 	set_multiplayer_authority(str(name).to_int())
+	multiplayerauthority = str(name).to_int()
 
 	%Authority.visible = is_multiplayer_authority()
 
