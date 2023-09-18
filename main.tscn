@@ -374,4 +374,6 @@ one_shot = true
 [connection signal="button_down" from="Control/Menu/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_button_down"]
 [connection signal="pressed" from="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer/YesButton" to="." method="_on_yes_button_pressed"]
 [connection signal="pressed" from="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer/NoButton" to="." method="_on_no_button_pressed"]
+[connection signal="despawned" from="MultiplayerSpawnerBlue" to="." method="_on_multiplayer_spawner_blue_despawned"]
+[connection signal="spawned" from="MultiplayerSpawnerBlue" to="." method="_on_multiplayer_spawner_blue_spawned"]
 [connection signal="timeout" from="ChatBoxDisapearsTimer" to="." method="_on_chat_box_disapears_timer_timeout"]

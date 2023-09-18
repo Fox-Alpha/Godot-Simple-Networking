@@ -96,32 +96,32 @@ func _on_server_display_players_connected(team : String) -> void:
 		if  multiplayer.is_server():
 			if multiplayer.has_multiplayer_peer():
 				var peerlist = multiplayer.get_peers()
-				
+
 				for p in peerlist:
 					# peer bereits in liste
 					if %PlayersConnectedListTeamBlue.get_node_or_null(str(p)) != null: #.find_child(str(p)):
 						continue
-					
+
 					if %PlayersConnectedListTeamRed.get_node_or_null(str(p)) != null: #.find_child(str(p)):
 						continue
-						
+
 					var HBox := HBoxContainer.new()
 					HBox.name = str(p)
 					HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 					# node.add_child(HBox)
-					
+
 					var lblplayer = Label.new()
 					lblplayer.text = str(p)
 					lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 					HBox.add_child(lblplayer)
-					
+
 					var button = Button.new()
 					button.text = "KICK"
 					button.name = str(p)
 					button.set_meta("p_id", p)
 					button.pressed.connect(_on_player_kick_pressed.bind(button))
 					HBox.add_child(button)
-					
+
 					match team:
 					# BLUE Team
 						"blue":
@@ -129,7 +129,7 @@ func _on_server_display_players_connected(team : String) -> void:
 					# RED Team
 						"red":
 							%PlayersConnectedListTeamRed.add_child(HBox)
-					
+
 					# %PlayersConnectedListTeamRed
 		pass
 
@@ -140,16 +140,16 @@ func display_players_connected(node : Node):
 	# Clear the previous list
 	if multiplayer.is_server():
 		return
-		
+
 	for c in node.get_children():
 		c.queue_free()
-		
+
 
 	# Create the list of connected players
 	# TODO: peerliste aus MultioplayerAPI verwenden
 	var _plist : Array[Node] = %SpawnPosition/Blue.get_children()
 	_plist.append_array(%SpawnPosition/Red.get_children())
-	
+
 	for _peer in _plist:
 		var HBox := HBoxContainer.new()
 		HBox.name = str(_peer.name)
@@ -166,7 +166,7 @@ func display_players_connected(node : Node):
 # Server
 func _on_player_kick_pressed(butt):
 #	var metavar : PackedStringArray = butt.get_meta_list()
-	
+
 #	for m in metavar:
 	var m : int = butt.get_meta("p_id")
 #	print_debug("Player Kicked ", m)
@@ -197,9 +197,13 @@ func _on_join_button_pressed():
 	if %Username.text == "":
 		%Username.text = "Player"
 
-	multiplayer.server_disconnected.connect(server_offline)
-	multiplayer.connected_to_server.connect(server_connected)
-	
+	if multiplayer.server_disconnected.is_connected(server_offline):
+		multiplayer.server_disconnected.disconnect(server_offline)
+		multiplayer.server_disconnected.connect(server_offline)
+	if multiplayer.connected_to_server.is_connected(server_connected):
+		multiplayer.connected_to_server.disconnect(server_connected)
+		multiplayer.connected_to_server.connect(server_connected)
+
 
 	load_game()
 
@@ -213,7 +217,7 @@ func add_player(id, team):
 	var player_instance = player.instantiate()
 	player_instance.name = str(id)
 #	player_instance.team = team
-			
+
 	var pname = player_instance.get_node("ReferenceRect/PlayerName").text
 
 	match team:
@@ -225,7 +229,7 @@ func add_player(id, team):
 			player_instance.team = Color.ORANGE_RED
 			%SpawnPosition/Red.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.ORANGE_RED
-			
+
 	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
 		_on_server_display_players_connected(team)
 		# "User {} is {}.".format([42, "Godot"], "{}")
@@ -235,15 +239,15 @@ func load_game():
 	%Menu.hide()
 	var map_instance = map.instantiate()
 	%MapInstance.add_child(map_instance)
-	
+
 	$Control/Lobby.visible = !multiplayer.is_server()
-	
+
 	if multiplayer.is_server():
 #		display_players_connected(%PlayersConnectedListTeamBlue)
 		%Scoreboard.show()
 
 func remove_player(id):
-	
+
 	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
 	if pnode != null:
 		pnode.queue_free()
@@ -259,8 +263,8 @@ func remove_player(id):
 			var pname = _player.get_node("ReferenceRect/PlayerName").text
 			send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Red".capitalize()], "{}"), false)
 			_player.queue_free()
-		
-		
+
+
 
 	# send_message.rpc(str(id), " left the game", false)
 
@@ -315,8 +319,18 @@ func _on_tree_exiting():
 
 func _on_button_pin_box_toggled(button_pressed):
 	%ChatBoxDisapearsTimer.paused = button_pressed
-	
+
 	if $ChatBoxDisapearsTimer.paused:
 		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "Pinned"
 	else:
 		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "unPinned"
+
+
+func _on_multiplayer_spawner_blue_despawned(node: Node) -> void:
+	print("DeSpawn Blue %s" % node.name)
+	pass # Replace with function body.
+
+
+func _on_multiplayer_spawner_blue_spawned(node: Node) -> void:
+	print("Spawn Blue %s" % node.name)
+	pass # Replace with function body.
