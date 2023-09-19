@@ -18,9 +18,7 @@ func _process(_delta):
 	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		if %LobbyConnectedPlayers.visible:
 			display_players_connected(%LobbyConnectedPlayers)
-		if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
-			#display_players_connected(%PlayersConnectedListTeamBlue)
-			pass
+
 
 func _ready():
 	$Control/Menu.show()
@@ -31,15 +29,14 @@ func _ready():
 	%Scoreboard.hide()
 	$Control/Lobby.hide()
 	$Control/QuitConfirmation.hide()
-
 	server_created.connect(_on_server_created)
 
-# Hold the Tab key to display connected players and press Enter to send a message
 
 func _input(_event):
 	if %Menu.visible: return # If the starting menu is not visible it means we are in the game
 
 	if not multiplayer.is_server():
+		# Hold the Tab key to display connected players and press Enter to send a message
 		if Input.is_key_pressed(KEY_TAB):
 			display_players_connected(%PlayersConnectedListTeamBlue)
 			%Scoreboard.show()
@@ -101,6 +98,7 @@ func send_message(player_name, message, is_server):
 	%ChatBox.show()
 	%ChatBoxDisapearsTimer.start()
 
+
 # Function to display players connected, it refreshes each time it is called on Server
 func _on_server_display_players_connected(team : String) -> void:
 	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
@@ -141,12 +139,9 @@ func _on_server_display_players_connected(team : String) -> void:
 						"red":
 							%PlayersConnectedListTeamRed.add_child(HBox)
 
-					# %PlayersConnectedListTeamRed
-		pass
 
-
-# Function to display players connected, it refreshes each time it is called on Clients
-
+# Function to display players connected,
+# it refreshes each time it is called on Clients
 func display_players_connected(node : Node):
 	# Clear the previous list
 	if multiplayer.is_server():
@@ -201,7 +196,6 @@ func _on_host_button_pressed():
 	server_created.emit()
 
 
-
 func player_joined(id):
 	print("main::player_joined() [202] -> Player_Joined() : " + str(id))
 	pass
@@ -222,7 +216,6 @@ func _on_join_button_pressed():
 	if multiplayer.connected_to_server.is_connected(server_connected):
 		multiplayer.connected_to_server.disconnect(server_connected)
 		multiplayer.connected_to_server.connect(server_connected)
-
 
 	load_game()
 
