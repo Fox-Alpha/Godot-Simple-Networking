@@ -11,6 +11,9 @@ var peer = ENetMultiplayerPeer.new()
 
 var enter_key_pressed = false
 
+@onready var playernode: Node = $Network/Player
+
+
 func _process(_delta):
 	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		if %LobbyConnectedPlayers.visible:
@@ -154,9 +157,10 @@ func display_players_connected(node : Node):
 
 
 	# Create the list of connected players
-	# TODO: peerliste aus MultioplayerAPI verwenden
-	var _plist : Array[Node] = %SpawnPosition/Blue.get_children()
-	_plist.append_array(%SpawnPosition/Red.get_children())
+	# TODO	: peerliste aus MultioplayerAPI verwenden
+	#		: Seperate Team Red and Team Blue
+	var _plist : Array[Node] = playernode.get_children()
+	_plist.append_array(playernode.get_children())
 
 	for _peer in _plist:
 		var HBox := HBoxContainer.new()
@@ -199,7 +203,7 @@ func _on_host_button_pressed():
 
 
 func player_joined(id):
-	print("Player_Joined() : " + str(id))
+	print("main::player_joined() [202] -> Player_Joined() : " + str(id))
 	pass
 
 
@@ -240,16 +244,24 @@ func add_player(id, team):
 	match team:
 		"blue":
 			player_instance.team = Color.DODGER_BLUE
-			%SpawnPosition/Blue.add_child(player_instance)
+			player_instance.global_position = %SpawnPosition/Blue.global_position
+
+			playernode.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.DODGER_BLUE
 		"red":
 			player_instance.team = Color.ORANGE_RED
-			%SpawnPosition/Red.add_child(player_instance)
+			player_instance.global_position = %SpawnPosition/Red.global_position
+
+			playernode.add_child(player_instance)
+#			%SpawnPosition/Red.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.ORANGE_RED
 		"host":
 
 			player_instance.team = Color.SEA_GREEN
-			%SpawnPosition/Host.add_child(player_instance)
+			player_instance.global_position = %SpawnPosition/Host.global_position
+
+			playernode.add_child(player_instance)
+#			%SpawnPosition/Host.add_child(player_instance)
 
 	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
 		_on_server_display_players_connected(team)
@@ -272,7 +284,7 @@ func remove_player(id):
 	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
 	if pnode != null:
 		pnode.queue_free()
-		var _player = %SpawnPosition/Blue.get_node_or_null(str(id))
+		var _player = playernode.get_node_or_null(str(id))
 		var pname = _player.get_node("ReferenceRect/PlayerName").text
 		_player.queue_free()
 		send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Blue".capitalize()], "{}"), false)
@@ -280,7 +292,7 @@ func remove_player(id):
 		pnode = %PlayersConnectedListTeamRed.get_node_or_null(str(id))
 		if (pnode != null):
 			pnode.queue_free()
-			var _player = %SpawnPosition/Red.get_node_or_null(str(id))
+			var _player = playernode.get_node_or_null(str(id))
 			var pname = _player.get_node("ReferenceRect/PlayerName").text
 			send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Red".capitalize()], "{}"), false)
 			_player.queue_free()

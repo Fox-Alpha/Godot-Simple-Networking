@@ -354,9 +354,9 @@ text = "     "
 layout_mode = 2
 text = "No"
 
-[node name="MultiplayerSpawnerBlue" type="MultiplayerSpawner" parent="."]
+[node name="MultiplayerSpawnerPlayerSpawn" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
-spawn_path = NodePath("../SpawnPosition/Blue")
+spawn_path = NodePath("../Network/Player")
 
 [node name="MultiplayerSpawnerRed" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
@@ -366,6 +366,10 @@ spawn_path = NodePath("../SpawnPosition/Red")
 unique_name_in_owner = true
 wait_time = 5.0
 one_shot = true
+
+[node name="Network" type="Node" parent="."]
+
+[node name="Player" type="Node" parent="Network"]
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="toggled" from="Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox" to="." method="_on_button_pin_box_toggled"]
@@ -378,6 +382,6 @@ one_shot = true
 [connection signal="button_down" from="Control/Menu/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_button_down"]
 [connection signal="pressed" from="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer/YesButton" to="." method="_on_yes_button_pressed"]
 [connection signal="pressed" from="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer/NoButton" to="." method="_on_no_button_pressed"]
-[connection signal="despawned" from="MultiplayerSpawnerBlue" to="." method="_on_multiplayer_spawner_blue_despawned"]
-[connection signal="spawned" from="MultiplayerSpawnerBlue" to="." method="_on_multiplayer_spawner_blue_spawned"]
+[connection signal="despawned" from="MultiplayerSpawnerPlayerSpawn" to="." method="_on_multiplayer_spawner_blue_despawned"]
+[connection signal="spawned" from="MultiplayerSpawnerPlayerSpawn" to="." method="_on_multiplayer_spawner_blue_spawned"]
 [connection signal="timeout" from="ChatBoxDisapearsTimer" to="." method="_on_chat_box_disapears_timer_timeout"]
