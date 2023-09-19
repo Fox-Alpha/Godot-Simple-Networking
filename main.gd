@@ -231,6 +231,8 @@ func server_connected():
 func add_player(id, team):
 	var player_instance = player.instantiate()
 	player_instance.name = str(id)
+	if multiplayer.is_server():
+		player_instance.get_node("ReferenceRect/PlayerName").text += " - HOST"
 #	player_instance.team = team
 
 	var pname = player_instance.get_node("ReferenceRect/PlayerName").text
@@ -245,7 +247,7 @@ func add_player(id, team):
 			%SpawnPosition/Red.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.ORANGE_RED
 		"host":
-			var uuid : int = multiplayer.multiplayer_peer.generate_unique_id()
+
 			player_instance.team = Color.SEA_GREEN
 			%SpawnPosition/Host.add_child(player_instance)
 
