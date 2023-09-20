@@ -15,6 +15,10 @@ run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AL_Network="*res://autoload/network.gd"
+
 [display]
 
 window/size/resizable=false
