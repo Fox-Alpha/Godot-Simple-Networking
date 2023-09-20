@@ -6,7 +6,7 @@ func _ready():
 	if multiplayer.is_server():
 		$ColorRect.color = Color("006e6f")
 	else:
-		$ColorRect.color = Color("645f5a")
+		$ColorRect.color = Color.DARK_KHAKI #("645f5a")
 	pass # Replace with function body.
 
 
