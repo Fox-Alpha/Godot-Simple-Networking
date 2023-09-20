@@ -18,7 +18,7 @@ unique_name_in_owner = true
 [node name="SpawnPosition" parent="." instance=ExtResource("2_k22kc")]
 unique_name_in_owner = true
 
-[node name="Control" type="Control" parent="."]
+[node name="Control_UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,42 +27,64 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="ChatBox" parent="Control" instance=ExtResource("3_egfme")]
+[node name="ChatBox" parent="Control_UI" instance=ExtResource("3_egfme")]
 unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
+layout_mode = 1
+offset_top = -430.0
+offset_bottom = 0.0
 
-[node name="Lobby" parent="Control" instance=ExtResource("4_tswso")]
+[node name="Lobby" parent="Control_UI" instance=ExtResource("4_tswso")]
 unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
+layout_mode = 1
 
-[node name="Scoreboard" parent="Control" instance=ExtResource("5_qiwcw")]
+[node name="Scoreboard" parent="Control_UI" instance=ExtResource("5_qiwcw")]
 unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
+layout_mode = 1
+anchors_preset = 3
+anchor_top = 1.0
+offset_top = -123.0
+grow_vertical = 0
 
-[node name="Menu" parent="Control" instance=ExtResource("6_xmp4e")]
+[node name="Menu" parent="Control_UI" instance=ExtResource("6_xmp4e")]
 unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
+visible = true
+layout_mode = 1
 
-[node name="SendMessage" parent="Control" instance=ExtResource("7_w36v2")]
+[node name="SendMessage" parent="Control_UI" instance=ExtResource("7_w36v2")]
 unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
+layout_mode = 1
+anchors_preset = 4
+anchor_left = 0.0
+anchor_top = 0.5
+anchor_right = 0.0
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_top = -20.5
+offset_right = 414.0
+offset_bottom = 20.5
+grow_horizontal = 1
+grow_vertical = 2
 
-[node name="QuitConfirmation" parent="Control" instance=ExtResource("8_k6kgi")]
-layout_mode = 0
-anchors_preset = 0
+[node name="QuitConfirmation" parent="Control_UI" instance=ExtResource("8_k6kgi")]
+visible = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -133.0
+offset_top = -45.5
+offset_right = 133.0
+offset_bottom = 45.5
 
 [node name="MultiplayerSpawnerPlayerSpawn" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("../Network/Player")
 
-[node name="MultiplayerSpawnerRed" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://player.tscn")
-spawn_path = NodePath("../SpawnPosition/Red")
+[node name="MultiplayerSpawnerMapInstance" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://map.tscn")
+spawn_path = NodePath("../MapInstance")
 
 [node name="ChatBoxDisapearsTimer" type="Timer" parent="."]
 unique_name_in_owner = true
