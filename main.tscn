@@ -66,7 +66,6 @@ grow_horizontal = 1
 grow_vertical = 2
 
 [node name="QuitConfirmation" parent="Control_UI" instance=ExtResource("8_k6kgi")]
-visible = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -77,6 +76,7 @@ offset_left = -133.0
 offset_top = -45.5
 offset_right = 133.0
 offset_bottom = 45.5
+metadata/_edit_use_anchors_ = true
 
 [node name="MultiplayerSpawnerPlayerSpawn" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
@@ -96,6 +96,4 @@ one_shot = true
 [node name="Player" type="Node" parent="Network"]
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
-[connection signal="despawned" from="MultiplayerSpawnerPlayerSpawn" to="." method="_on_multiplayer_spawner_blue_despawned"]
-[connection signal="spawned" from="MultiplayerSpawnerPlayerSpawn" to="." method="_on_multiplayer_spawner_blue_spawned"]
 [connection signal="timeout" from="ChatBoxDisapearsTimer" to="." method="_on_chat_box_disapears_timer_timeout"]

@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://xsr3n38kc6wp"]
+[gd_scene load_steps=2 format=3 uid="uid://xsr3n38kc6wp"]
+
+[ext_resource type="Script" path="res://ui/menu.gd" id="1_m2fx1"]
 
 [node name="Menu" type="PanelContainer"]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -13,6 +14,7 @@ offset_right = 150.0
 offset_bottom = 118.5
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_m2fx1")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
