@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://xsr3n38kc6wp" path="res://ui/menu.tscn" id="6_xmp4e"]
 [ext_resource type="PackedScene" uid="uid://bh6fv7mm72hyf" path="res://ui/send_message.tscn" id="7_w36v2"]
 [ext_resource type="PackedScene" uid="uid://nsbux4s4243s" path="res://ui/quit_confirmation.tscn" id="8_k6kgi"]
-[ext_resource type="Script" path="res://ui/pausemenu.gd" id="9_fi3tl"]
+[ext_resource type="PackedScene" uid="uid://iewn2nwwyp5i" path="res://ui/pause_menu.tscn" id="9_odwst"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_djg2a")
@@ -81,12 +81,8 @@ offset_right = 133.0
 offset_bottom = 45.5
 metadata/_edit_use_anchors_ = true
 
-[node name="PauseMenu" type="PanelContainer" parent="Control_UI"]
-visible = false
+[node name="PauseMenu" parent="Control_UI" instance=ExtResource("9_odwst")]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("9_fi3tl")
 
 [node name="MultiplayerSpawnerPlayerSpawn" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
