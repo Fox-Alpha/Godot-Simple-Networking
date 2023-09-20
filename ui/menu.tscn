@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://xsr3n38kc6wp"]
+
+[node name="Menu" type="PanelContainer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -118.5
+offset_right = 150.0
+offset_bottom = 118.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="HostButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Username" type="LineEdit" parent="MarginContainer/VBoxContainer" groups=["player_name"]]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Username"
+max_length = 20
+
+[node name="JoinButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join
+"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit game"

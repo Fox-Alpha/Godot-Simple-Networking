@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://drffjlsqb5lod"]
+[gd_scene load_steps=9 format=3 uid="uid://drffjlsqb5lod"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_djg2a"]
+[ext_resource type="PackedScene" uid="uid://c4mig7oq5mr0" path="res://ui/spawn_position.tscn" id="2_k22kc"]
+[ext_resource type="PackedScene" uid="uid://c7tfhapve43h7" path="res://ui/chat_box.tscn" id="3_egfme"]
+[ext_resource type="PackedScene" uid="uid://be3w7pa3jkbji" path="res://ui/lobby.tscn" id="4_tswso"]
+[ext_resource type="PackedScene" uid="uid://cgddotqh6hprh" path="res://ui/scoreboard.tscn" id="5_qiwcw"]
+[ext_resource type="PackedScene" uid="uid://xsr3n38kc6wp" path="res://ui/menu.tscn" id="6_xmp4e"]
+[ext_resource type="PackedScene" uid="uid://bh6fv7mm72hyf" path="res://ui/send_message.tscn" id="7_w36v2"]
+[ext_resource type="PackedScene" uid="uid://nsbux4s4243s" path="res://ui/quit_confirmation.tscn" id="8_k6kgi"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_djg2a")
@@ -8,19 +15,8 @@ script = ExtResource("1_djg2a")
 [node name="MapInstance" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="SpawnPosition" type="Node2D" parent="."]
+[node name="SpawnPosition" parent="." instance=ExtResource("2_k22kc")]
 unique_name_in_owner = true
-y_sort_enabled = true
-position = Vector2(600, 300)
-
-[node name="Blue" type="Node2D" parent="SpawnPosition"]
-position = Vector2(-300, 0)
-
-[node name="Red" type="Node2D" parent="SpawnPosition"]
-position = Vector2(300, 0)
-
-[node name="Host" type="Node2D" parent="SpawnPosition"]
-position = Vector2(0, -200)
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -31,328 +27,34 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="ChatBox" type="PanelContainer" parent="Control"]
+[node name="ChatBox" parent="Control" instance=ExtResource("3_egfme")]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -203.0
-offset_right = 413.0
-offset_bottom = 227.0
-grow_vertical = 0
+layout_mode = 0
+anchors_preset = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/ChatBox"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/ChatBox/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="ButtonPinBox" type="Button" parent="Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-toggle_mode = true
-text = "PIN"
-
-[node name="DisplayedMessage" type="VBoxContainer" parent="Control/ChatBox/MarginContainer/VBoxContainer"]
+[node name="Lobby" parent="Control" instance=ExtResource("4_tswso")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
+layout_mode = 0
+anchors_preset = 0
 
-[node name="Lobby" type="PanelContainer" parent="Control"]
+[node name="Scoreboard" parent="Control" instance=ExtResource("5_qiwcw")]
 unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -91.0
-offset_right = 150.0
-offset_bottom = 91.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+anchors_preset = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/Lobby"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Lobby/MarginContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Lobby/MarginContainer/HBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="SpawnTeamRedButton" type="Button" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "RED team"
-
-[node name="SpawnTeamBlueButton" type="Button" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "BLUE team"
-
-[node name="HSeparator" type="HSeparator" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="SpectateButton" type="Button" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Spectate"
-
-[node name="HSeparator2" type="HSeparator" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MenuButton" type="Button" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "< Main menu"
-
-[node name="VSeparator" type="VSeparator" parent="Control/Lobby/MarginContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="Control/Lobby/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-text = "Connected:"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="LobbyConnectedPlayers" type="VBoxContainer" parent="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
+[node name="Menu" parent="Control" instance=ExtResource("6_xmp4e")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+layout_mode = 0
+anchors_preset = 0
 
-[node name="Scoreboard" type="PanelContainer" parent="Control"]
+[node name="SendMessage" parent="Control" instance=ExtResource("7_w36v2")]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -729.0
-grow_horizontal = 0
-grow_vertical = 2
+layout_mode = 0
+anchors_preset = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/Scoreboard"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainerHeader" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainerHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Players BLUE Team:"
-
-[node name="Label2" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainerHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Players RED Team:"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer" groups=["BLUE", "RED"]]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayersConnectedListTeamBlue" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VSeparator" type="VSeparator" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="PlayersConnectedListTeamRed" type="VBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Connected as: "
-
-[node name="LabelPlayername" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "XXXXXXX"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label2" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-text = "Server: "
-
-[node name="LabelServeradress" type="Label" parent="Control/Scoreboard/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "LOCALHOST"
-
-[node name="Menu" type="PanelContainer" parent="Control"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -118.5
-offset_right = 150.0
-offset_bottom = 118.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/Menu"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Menu/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 15
-alignment = 1
-
-[node name="HostButton" type="Button" parent="Control/Menu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Host"
-
-[node name="HSeparator" type="HSeparator" parent="Control/Menu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Username" type="LineEdit" parent="Control/Menu/MarginContainer/VBoxContainer" groups=["player_name"]]
-unique_name_in_owner = true
-layout_mode = 2
-placeholder_text = "Username"
-max_length = 20
-
-[node name="JoinButton" type="Button" parent="Control/Menu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Join
-"
-
-[node name="HSeparator2" type="HSeparator" parent="Control/Menu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="QuitButton" type="Button" parent="Control/Menu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Quit game"
-
-[node name="SendMessage" type="PanelContainer" parent="Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -576.0
-offset_top = -248.0
-offset_right = -162.0
-offset_bottom = -207.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/SendMessage"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/SendMessage/MarginContainer"]
-layout_mode = 2
-
-[node name="Info" type="Label" parent="Control/SendMessage/MarginContainer/HBoxContainer"]
-layout_mode = 2
-text = "Say : "
-
-[node name="TypedMessage" type="LineEdit" parent="Control/SendMessage/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(350, 0)
-layout_mode = 2
-max_length = 35
-
-[node name="QuitConfirmation" type="PanelContainer" parent="Control"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/QuitConfirmation"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/QuitConfirmation/MarginContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/QuitConfirmation/MarginContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Are you sure you want to quit?"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/QuitConfirmation/MarginContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="YesButton" type="Button" parent="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Yes"
-
-[node name="Label" type="Label" parent="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "     "
-
-[node name="NoButton" type="Button" parent="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "No"
+[node name="QuitConfirmation" parent="Control" instance=ExtResource("8_k6kgi")]
+layout_mode = 0
+anchors_preset = 0
 
 [node name="MultiplayerSpawnerPlayerSpawn" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
@@ -372,16 +74,6 @@ one_shot = true
 [node name="Player" type="Node" parent="Network"]
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
-[connection signal="toggled" from="Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox" to="." method="_on_button_pin_box_toggled"]
-[connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/SpawnTeamRedButton" to="." method="_on_spawn_team_red_button_pressed"]
-[connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/SpawnTeamBlueButton" to="." method="_on_spawn_team_blue_button_pressed"]
-[connection signal="pressed" from="Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="Control/Menu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="text_submitted" from="Control/Menu/MarginContainer/VBoxContainer/Username" to="." method="_on_username_text_submitted"]
-[connection signal="pressed" from="Control/Menu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="button_down" from="Control/Menu/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_button_down"]
-[connection signal="pressed" from="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer/YesButton" to="." method="_on_yes_button_pressed"]
-[connection signal="pressed" from="Control/QuitConfirmation/MarginContainer/VBoxContainer/HBoxContainer/NoButton" to="." method="_on_no_button_pressed"]
 [connection signal="despawned" from="MultiplayerSpawnerPlayerSpawn" to="." method="_on_multiplayer_spawner_blue_despawned"]
 [connection signal="spawned" from="MultiplayerSpawnerPlayerSpawn" to="." method="_on_multiplayer_spawner_blue_spawned"]
 [connection signal="timeout" from="ChatBoxDisapearsTimer" to="." method="_on_chat_box_disapears_timer_timeout"]
