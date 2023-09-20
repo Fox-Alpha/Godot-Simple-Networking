@@ -37,7 +37,10 @@ func display_players_connected(node : Node):
 	var _plist = multiplayer.get_peers()
 
 	for _p in _plist:
-		var _peer : Node = AL_Globals.playernode.find_child(str(_p))
+		var _peer : Node = AL_Globals.playernode.get_node_or_null("/root/Main/Network/Player/{0}".format([str(_p)]))
+
+		if _peer == null: break
+
 		var HBox := HBoxContainer.new()
 		HBox.name = str(_peer.name)
 		HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
