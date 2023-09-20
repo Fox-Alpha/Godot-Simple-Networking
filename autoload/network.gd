@@ -6,7 +6,9 @@ var peer = ENetMultiplayerPeer.new()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	AL_Signalbus.host_server_created.connect(_on_host_server_created)
+	AL_Signalbus.local_client_created.connect(_on_local_client_created)
 	AL_Signalbus._do_server_create.connect(_on_do_server_create)
+	AL_Signalbus._do_client_create.connect(_on_do_client_create)
 	pass # Replace with function body.
 
 
@@ -95,7 +97,7 @@ func load_game():
 
 #	$Control/Lobby.visible = !multiplayer.is_server()
 	print(str("load_game() -> Authority: %d" % [AL_Globals.mapnode.get_multiplayer_authority()]))
-	if multiplayer.is_server():
+	if is_multiplayer_authority():
 		var map_instance = AL_Globals.map.instantiate()
 		AL_Globals.mapnode.add_child(map_instance)
 
@@ -129,23 +131,26 @@ func _on_do_server_create():
 	pass
 
 
-func _on_do_client_create():
+func _on_local_client_created() -> void:
+	pass
+
+
+func _on_do_client_create(username : String):
 	peer.create_client("localhost", 21277)
 	multiplayer.multiplayer_peer = peer
 
-	if %Username.text == "":
-		%Username.text = "Player" + str(multiplayer.get_unique_id())
-
 	if multiplayer.server_disconnected.is_connected(server_offline):
 		multiplayer.server_disconnected.disconnect(server_offline)
-		multiplayer.server_disconnected.connect(server_offline)
+
+	multiplayer.server_disconnected.connect(server_offline)
 
 	if multiplayer.connected_to_server.is_connected(server_connected):
 		multiplayer.connected_to_server.disconnect(server_connected)
-		multiplayer.connected_to_server.connect(server_connected)
 
-#	load_game()
+	multiplayer.connected_to_server.connect(server_connected)
 
+	print("Create Client success ! %s" % username)
+	AL_Signalbus.local_client_created.emit()
 
 func server_connected():
 	print("Client::server_connected() -> Connection to Server success !")
