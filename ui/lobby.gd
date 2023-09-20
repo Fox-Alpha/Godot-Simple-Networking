@@ -4,6 +4,10 @@ extends PanelContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		if %LobbyConnectedPlayers.visible:
+			#Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2/ScrollContainer/LobbyConnectedPlayers
+			display_players_connected(%LobbyConnectedPlayers)
 	pass # Replace with function body.
 
 
@@ -25,14 +29,15 @@ func display_players_connected(node : Node):
 	for c in node.get_children():
 		c.queue_free()
 
-
 	# Create the list of connected players
 	# TODO	: peerliste aus MultioplayerAPI verwenden
 	#		: Seperate Team Red and Team Blue
-	var _plist : Array[Node] = playernode.get_children()
-	_plist.append_array(playernode.get_children())
+	var _peer_node_list : Array[Node] = AL_Globals.playernode.get_children()
+#	_plist.append_array(playernode.get_children())
+	var _plist = multiplayer.get_peers()
 
-	for _peer in _plist:
+	for _p in _plist:
+		var _peer : Node = AL_Globals.playernode.find_child(str(_p))
 		var HBox := HBoxContainer.new()
 		HBox.name = str(_peer.name)
 		HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -46,13 +51,14 @@ func display_players_connected(node : Node):
 
 func _on_menu_button_pressed():
 	# ToDo: Signal senden
-	quit_game()
+#	quit_game()
+	pass
 
 
 func _on_spawn_team_red_button_pressed():
-	add_player.rpc_id(1, multiplayer.get_unique_id(), "red")
-	$Control/Lobby.hide()
+	AL_Globals.add_player.rpc_id(1, multiplayer.get_unique_id(), "red")
+	hide()
 
 func _on_spawn_team_blue_button_pressed():
-	add_player.rpc_id(1, multiplayer.get_unique_id(), "blue")
-	$Control/Lobby.hide()
+	AL_Globals.add_player.rpc_id(1, multiplayer.get_unique_id(), "blue")
+	hide()
