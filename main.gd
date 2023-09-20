@@ -14,10 +14,11 @@ var enter_key_pressed = false
 @onready var playernode: Node = $Network/Player
 
 
-func _process(_delta):
-	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
-		if %LobbyConnectedPlayers.visible:
-			display_players_connected(%LobbyConnectedPlayers)
+#func _process(_delta):
+#	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+#		if %LobbyConnectedPlayers.visible:
+#			#Control/Lobby/MarginContainer/HBoxContainer/VBoxContainer2/ScrollContainer/LobbyConnectedPlayers
+#			display_players_connected(%LobbyConnectedPlayers)
 
 
 func _ready():
@@ -38,7 +39,7 @@ func _input(_event):
 	if not multiplayer.is_server():
 		# Hold the Tab key to display connected players and press Enter to send a message
 		if Input.is_key_pressed(KEY_TAB):
-			display_players_connected(%PlayersConnectedListTeamBlue)
+			%Lobby.display_players_connected(%PlayersConnectedListTeamBlue)
 			%Scoreboard.show()
 		else:
 			%Scoreboard.hide()
@@ -71,6 +72,7 @@ func _on_server_created():
 
 
 # Function to send a message
+# Client -> Server -> Alle Clients -> Client anzeige in UI
 @rpc("call_local", "any_peer")
 func send_message(player_name, message, is_server):
 	var HBox = HBoxContainer.new()
@@ -99,101 +101,42 @@ func send_message(player_name, message, is_server):
 	%ChatBoxDisapearsTimer.start()
 
 
-# Function to display players connected, it refreshes each time it is called on Server
-func _on_server_display_players_connected(team : String) -> void:
-	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
-		if  multiplayer.is_server():
-			if multiplayer.has_multiplayer_peer():
-				var peerlist = multiplayer.get_peers()
-
-				for p in peerlist:
-					# peer bereits in liste
-					if %PlayersConnectedListTeamBlue.get_node_or_null(str(p)) != null: #.find_child(str(p)):
-						continue
-
-					if %PlayersConnectedListTeamRed.get_node_or_null(str(p)) != null: #.find_child(str(p)):
-						continue
-
-					var HBox := HBoxContainer.new()
-					HBox.name = str(p)
-					HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-					# node.add_child(HBox)
-
-					var lblplayer = Label.new()
-					lblplayer.text = str(p)
-					lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-					HBox.add_child(lblplayer)
-
-					var button = Button.new()
-					button.text = "KICK"
-					button.name = str(p)
-					button.set_meta("p_id", p)
-					button.pressed.connect(_on_player_kick_pressed.bind(button))
-					HBox.add_child(button)
-
-					match team:
-					# BLUE Team
-						"blue":
-							%PlayersConnectedListTeamBlue.add_child(HBox)
-					# RED Team
-						"red":
-							%PlayersConnectedListTeamRed.add_child(HBox)
 
 
-# Function to display players connected,
-# it refreshes each time it is called on Clients
-func display_players_connected(node : Node):
-	# Clear the previous list
-	if multiplayer.is_server():
-		return
-
-	for c in node.get_children():
-		c.queue_free()
-
-
-	# Create the list of connected players
-	# TODO	: peerliste aus MultioplayerAPI verwenden
-	#		: Seperate Team Red and Team Blue
-	var _plist : Array[Node] = playernode.get_children()
-	_plist.append_array(playernode.get_children())
-
-	for _peer in _plist:
-		var HBox := HBoxContainer.new()
-		HBox.name = str(_peer.name)
-		HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		node.add_child(HBox)
-
-		var lblplayer = Label.new()
-		lblplayer.text = str(_peer.name)
-		lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		HBox.add_child(lblplayer)
+## Function to display players connected,
+## it refreshes each time it is called on Clients
+#func display_players_connected(node : Node):
+#	# Clear the previous list
+#	if multiplayer.is_server():
+#		return
+#
+#	for c in node.get_children():
+#		c.queue_free()
+#
+#
+#	# Create the list of connected players
+#	# TODO	: peerliste aus MultioplayerAPI verwenden
+#	#		: Seperate Team Red and Team Blue
+#	var _plist : Array[Node] = playernode.get_children()
+#	_plist.append_array(playernode.get_children())
+#
+#	for _peer in _plist:
+#		var HBox := HBoxContainer.new()
+#		HBox.name = str(_peer.name)
+#		HBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+#		node.add_child(HBox)
+#
+#		var lblplayer = Label.new()
+#		lblplayer.text = str(_peer.name)
+#		lblplayer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+#		HBox.add_child(lblplayer)
 
 # Networking system
 
 # Server
-func _on_player_kick_pressed(butt):
-#	var metavar : PackedStringArray = butt.get_meta_list()
-
-#	for m in metavar:
-	var m : int = butt.get_meta("p_id")
-#	print_debug("Player Kicked ", m)
-	peer.disconnect_peer(m)
-#	pass
 
 
-func _on_host_button_pressed():
-	if peer.create_server(9999) != OK:
-		print("Create Server failed !")
-		return
 
-	multiplayer.multiplayer_peer = peer
-
-	multiplayer.peer_disconnected.connect(remove_player)
-	multiplayer.peer_connected.connect(player_joined)
-
-	load_game()
-
-	server_created.emit()
 
 
 func player_joined(id):
@@ -202,22 +145,6 @@ func player_joined(id):
 
 
 # Client
-
-func _on_join_button_pressed():
-	peer.create_client("localhost", 9999)
-	multiplayer.multiplayer_peer = peer
-
-	if %Username.text == "":
-		%Username.text = "Player"
-
-	if multiplayer.server_disconnected.is_connected(server_offline):
-		multiplayer.server_disconnected.disconnect(server_offline)
-		multiplayer.server_disconnected.connect(server_offline)
-	if multiplayer.connected_to_server.is_connected(server_connected):
-		multiplayer.connected_to_server.disconnect(server_connected)
-		multiplayer.connected_to_server.connect(server_connected)
-
-	load_game()
 
 
 func server_connected():
@@ -261,16 +188,18 @@ func add_player(id, team):
 		# "User {} is {}.".format([42, "Godot"], "{}")
 		send_message.rpc(str(id), " ({} / {}) has joined the game".format([pname, team.capitalize()], "{}"), false)
 
+
+@rpc("authority")
 func load_game():
-	%Menu.hide()
-	var map_instance = map.instantiate()
-	%MapInstance.add_child(map_instance)
+#	%Menu.hide()
+#	%MapInstance.add_child(map_instance)
 
-	$Control/Lobby.visible = !multiplayer.is_server()
+#	$Control/Lobby.visible = !multiplayer.is_server()
 
-	if multiplayer.is_server():
+#	if multiplayer.is_server():
 #		display_players_connected(%PlayersConnectedListTeamBlue)
-		%Scoreboard.show()
+#		%Scoreboard.show()
+	var map_instance = map.instantiate()
 
 func remove_player(id):
 
@@ -295,31 +224,18 @@ func remove_player(id):
 	# send_message.rpc(str(id), " left the game", false)
 
 func server_offline():
+	# Per Signal
 	quit_game()
 
-func _on_username_text_submitted(_new_text):
-	_on_join_button_pressed()
 
-func _on_chat_box_disapears_timer_timeout():
-	%ChatBox.hide()
-
+# ToDo: Wo ist der QuitButton ?
 func _on_quit_button_button_down():
 	$Control/QuitConfirmation.show()
 
-func _on_spawn_team_red_button_pressed():
-	add_player.rpc_id(1, multiplayer.get_unique_id(), "red")
-	$Control/Lobby.hide()
 
-func _on_spawn_team_blue_button_pressed():
-	add_player.rpc_id(1, multiplayer.get_unique_id(), "blue")
-	$Control/Lobby.hide()
 
-func _on_yes_button_pressed():
-	get_tree().quit()
 
-func _on_no_button_pressed():
-	$Control/QuitConfirmation.hide()
-
+# ToDo: Per Signal aufrufen
 func quit_game():
 	%Lobby.hide()
 	%Menu.show()
@@ -328,8 +244,7 @@ func quit_game():
 	%TypedMessage.text = ""
 	%MapInstance.get_child(0).queue_free()
 
-func _on_menu_button_pressed():
-	quit_game()
+
 
 
 func _on_tree_exiting():
@@ -345,20 +260,5 @@ func _on_tree_exiting():
 	pass # Replace with function body.
 
 
-func _on_button_pin_box_toggled(button_pressed):
-	%ChatBoxDisapearsTimer.paused = button_pressed
-
-	if $ChatBoxDisapearsTimer.paused:
-		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "Pinned"
-	else:
-		$Control/ChatBox/MarginContainer/VBoxContainer/HBoxContainer/ButtonPinBox.text = "unPinned"
 
 
-func _on_multiplayer_spawner_blue_despawned(node: Node) -> void:
-	print("DeSpawn Blue %s" % node.name)
-	pass # Replace with function body.
-
-
-func _on_multiplayer_spawner_blue_spawned(node: Node) -> void:
-	print("Spawn Blue %s" % node.name)
-	pass # Replace with function body.
