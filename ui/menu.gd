@@ -20,4 +20,9 @@ func _on_host_button_pressed():
 
 
 func _on_join_button_pressed():
+	if %Username.text == "":
+		%Username.text = "Player" + str(multiplayer.get_unique_id())
+	var user = %Username.text
+
+	AL_Signalbus._do_client_create.emit(user)
 	pass
