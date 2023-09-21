@@ -19,16 +19,21 @@ func _ready() -> void:
 #####
 # Server
 #####
+## Show Message when client connected
+# ToDo: Rename Func, _on_XX_server_XXXX
 func player_joined(id):
 	print("main::player_joined() [202] -> Player_Joined() : " + str(id))
 	pass
 #####
 # Client
 #####
+## Called from Client to server. To Create client network instance (Character)
 @rpc("call_local", "any_peer")
+# ToDo: Rename Func, _on_do_client_XXXX
 func add_client_player(id, team : String):
 	print("Server: {0} / Id: {1}".format([str(multiplayer.is_server()), str(id)]))
 	if multiplayer.is_server():
+		# ToDo: Call per Siganl at Host ?
 		add_player.rpc_id(1, id, team)
 	pass
 #####
@@ -36,9 +41,10 @@ func add_client_player(id, team : String):
 #####
 # Game
 #####
+## Callöed locally on Server to create client Network Node
+## Synced to Client with MultiplayerSpawner Node
 @rpc("authority", "call_local")
-#@rpc("authority")
-#@rpc("call_local", "any_peer")
+# ToDo: Rename Func, _on_do_server_XXXX
 func add_player(id, team : String):
 	var player_instance = AL_Globals.player.instantiate()
 	var sp_rt_node : Node = AL_Globals.spawnrootnode.find_child(team.capitalize())
@@ -78,7 +84,11 @@ func add_player(id, team : String):
 #		send_message.rpc(str(id), " ({} / {}) has joined the game".format([pname, team.capitalize()], "{}"), false)
 
 
+## Removes client network node. Close Connection and inform all Clients
 @rpc("authority")
+# ToDo: Seperate remove player on Host and Client
+# ToDo: Rename Func, _on_do_server_XXXX
+#		Add Signal for UI notification. To Remove entry from connected clientlist
 func remove_player(id):
 	return
 	@warning_ignore("unreachable_code")
@@ -100,25 +110,23 @@ func remove_player(id):
 	# send_message.rpc(str(id), " left the game", false)
 
 
-#@rpc("call_local")
+## Load the Map on Server. Synced by MultiplayerSpawner Node
 @rpc("authority", "call_local")
+# ToDo: Rename Func, _on_do_server_XXXX
 func load_game():
-#	%Menu.hide()
-
-#	$Control/Lobby.visible = !multiplayer.is_server()
 	print(str("load_game() -> Authority: %d" % [AL_Globals.mapnode.get_multiplayer_authority()]))
 	if is_multiplayer_authority():
 		var map_instance = AL_Globals.map.instantiate()
 		AL_Globals.mapnode.add_child(map_instance)
 
-#		display_players_connected(%PlayersConnectedListTeamBlue)
-#		%Scoreboard.show()
-
-
 
 #####
 # Signals
 #####
+# ToDo:	Add Signal for Network Errorhandling, Displaying
+#		Client, Server; UI
+#####
+## Called when local Server creation is done
 func _on_host_server_created() -> void:
 	# ToDo 	:	Show Lobby and Wait for Clients bevor starting
 	# 		:	Errorhandling
@@ -131,6 +139,7 @@ func _on_host_server_created() -> void:
 		add_player(1, "host")
 
 
+## Called when hosting a Server starts
 func _on_do_server_create():
 	if peer.create_server(21277) != OK:
 		print("Create Server failed !")
@@ -146,10 +155,13 @@ func _on_do_server_create():
 	pass
 
 
+
+## Called when local Clöient creation is done
 func _on_local_client_created() -> void:
 	pass
 
 
+## Called when connecting to a Server starts
 func _on_do_client_create(username : String):
 	peer.create_client("localhost", 21277)
 	multiplayer.multiplayer_peer = peer
@@ -167,11 +179,14 @@ func _on_do_client_create(username : String):
 	print("Create Client success ! %s" % username)
 	AL_Signalbus.local_client_created.emit()
 
+
+## Called when connection to Server is successfull
 func server_connected():
 	print("Client::server_connected() -> Connection to Server success !")
 	pass
 
 
+## Called when connection to Server is lost
 func server_offline():
 	# Per Signal
 	print("Client::server_offline() -> Connection to Server lost !")
