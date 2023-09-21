@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://drffjlsqb5lod"]
+[gd_scene load_steps=11 format=3 uid="uid://drffjlsqb5lod"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_djg2a"]
 [ext_resource type="PackedScene" uid="uid://c4mig7oq5mr0" path="res://ui/spawn_position.tscn" id="2_k22kc"]
 [ext_resource type="PackedScene" uid="uid://c7tfhapve43h7" path="res://ui/chat_box.tscn" id="3_egfme"]
+[ext_resource type="Script" path="res://ui/control_ui.gd" id="3_hfet8"]
 [ext_resource type="PackedScene" uid="uid://be3w7pa3jkbji" path="res://ui/lobby.tscn" id="4_tswso"]
 [ext_resource type="PackedScene" uid="uid://cgddotqh6hprh" path="res://ui/scoreboard.tscn" id="5_qiwcw"]
 [ext_resource type="PackedScene" uid="uid://xsr3n38kc6wp" path="res://ui/menu.tscn" id="6_xmp4e"]
@@ -26,6 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_hfet8")
 metadata/_edit_lock_ = true
 
 [node name="ChatBox" parent="Control_UI" instance=ExtResource("3_egfme")]
