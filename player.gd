@@ -15,15 +15,20 @@ func _ready():
 func _physics_process(_delta):
 #	if get_multiplayer_authority() != multiplayerauthority: return
 	# ToDo: Check for Authority for Host Character ID 1
-	if not multiplayer.is_server():
-		if not is_multiplayer_authority(): return
-		velocity = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") * 500
-		move_and_slide()
+#	if not multiplayer.is_server():
+#		if not is_multiplayer_authority(): return
+#		var vel = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") * 500
+#		if vel != Vector2.ZERO:
+#			velocity = vel
+#			move_and_slide()
 
 	# Only for Host Character
-	elif get_multiplayer_authority() == multiplayerauthority:
-		velocity = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") * 500
-		move_and_slide()
+#	elif get_multiplayer_authority() == multiplayerauthority:
+	if is_multiplayer_authority():
+		var vel = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") * 500
+		if vel != Vector2.ZERO:
+			velocity = vel
+			move_and_slide()
 
 
 func _on_tree_entered():
