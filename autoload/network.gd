@@ -25,15 +25,24 @@ func player_joined(id):
 #####
 # Client
 #####
+@rpc("call_local", "any_peer")
+func add_client_player(id, team : String):
+	print("Server: {0} / Id: {1}".format([str(multiplayer.is_server()), str(id)]))
+	if multiplayer.is_server():
+		add_player.rpc_id(1, id, team)
+	pass
 #####
 
 #####
 # Game
 #####
-@rpc("authority")
+@rpc("authority", "call_local")
+#@rpc("authority")
 #@rpc("call_local", "any_peer")
-func add_player(id, team):
+func add_player(id, team : String):
 	var player_instance = AL_Globals.player.instantiate()
+	var sp_rt_node : Node = AL_Globals.spawnrootnode.find_child(team.capitalize())
+	# ToDo: Errorhandling, when spawnnode not found
 	player_instance.name = str(id)
 	if multiplayer.is_server():
 		player_instance.get_node("ReferenceRect/PlayerName").text += " - HOST"
@@ -44,13 +53,13 @@ func add_player(id, team):
 	match team:
 		"blue":
 			player_instance.team = Color.DODGER_BLUE
-			player_instance.global_position = %SpawnPosition/Blue.global_position
+			player_instance.global_position =sp_rt_node.global_position
 
 			AL_Globals.playernode.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.DODGER_BLUE
 		"red":
 			player_instance.team = Color.ORANGE_RED
-			player_instance.global_position = %SpawnPosition/Red.global_position
+			player_instance.global_position = sp_rt_node.global_position
 
 			AL_Globals.playernode.add_child(player_instance)
 #			%SpawnPosition/Red.add_child(player_instance)
@@ -58,7 +67,7 @@ func add_player(id, team):
 		"host":
 
 			player_instance.team = Color.SEA_GREEN
-			player_instance.global_position = %SpawnPosition/Host.global_position
+			player_instance.global_position = sp_rt_node.global_position
 
 			AL_Globals.playernode.add_child(player_instance)
 #			%SpawnPosition/Host.add_child(player_instance)
@@ -71,7 +80,8 @@ func add_player(id, team):
 
 @rpc("authority")
 func remove_player(id):
-
+	return
+	@warning_ignore("unreachable_code")
 	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
 	if pnode != null:
 		pnode.queue_free()
@@ -110,10 +120,15 @@ func load_game():
 # Signals
 #####
 func _on_host_server_created() -> void:
+	# ToDo 	:	Show Lobby and Wait for Clients bevor starting
+	# 		:	Errorhandling
 #	add_player.rpc_id(1, multiplayer.multiplayer_peer.generate_unique_id(), "host")
 	var _err = rpc_id(1,"load_game")
 	if _err:
 		print(error_string(_err))
+		return
+	else:
+		add_player(1, "host")
 
 
 func _on_do_server_create():
