@@ -59,9 +59,16 @@ func _on_menu_button_pressed():
 
 
 func _on_spawn_team_red_button_pressed():
-	AL_Globals.add_player.rpc_id(1, multiplayer.get_unique_id(), "red")
+	AL_Network.add_client_player.rpc_id(1, multiplayer.get_unique_id(), "red")
+#	var _err = AL_Network.add_player.rpc_id(1, multiplayer.get_unique_id(), "red")
+#	if _err:
+#		print(error_string(_err))
 	hide()
 
 func _on_spawn_team_blue_button_pressed():
-	AL_Globals.add_player.rpc_id(1, multiplayer.get_unique_id(), "blue")
+	AL_Network.add_client_player.rpc_id(1, multiplayer.get_unique_id(), "red")
+#	var _err = AL_Network.add_player.rpc_id(1, multiplayer.get_unique_id(), "blue")
+#	var _err = rpc_id(1, "add_client_player", multiplayer.get_unique_id(), "blue")
+#	if _err:
+#		print(error_string(_err))
 	hide()
