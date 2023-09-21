@@ -19,15 +19,9 @@ func _on_tree_exiting():
 func _ready():
 	AL_Globals.playernode = get_node_or_null("Network/Player")
 	AL_Globals.mapnode = get_node_or_null("MapInstance")
+	AL_Globals.spawnrootnode = %SpawnPosition #.get_node_or_null("SpawnPosition")
 	AL_Globals.rootnode = get_tree().get_root()
-	%Menu.show()
-	%ChatBox.position.y = get_viewport().size.y - (get_viewport().size.y / 3) - 15
-	%ChatBox.hide()
-	%SendMessage.position.y = get_viewport().size.y - (get_viewport().size.y / 6)
-	%SendMessage.hide()
-	%Scoreboard.hide()
-	%Lobby.hide()
-	%QuitConfirmation.hide()
+
 
 
 #func _process(_delta):
@@ -36,7 +30,8 @@ func _ready():
 
 func _input(_event):
 	if %Menu.visible: return # If the starting menu is not visible it means we are in the game
-
+	return
+	@warning_ignore("unreachable_code")
 	if not multiplayer.is_server():
 		# Hold the Tab key to display connected players and press Enter to send a message
 		if Input.is_key_pressed(KEY_TAB):
