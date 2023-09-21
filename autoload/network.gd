@@ -8,6 +8,7 @@ func _ready() -> void:
 	AL_Signalbus.host_server_created.connect(_on_host_server_created)
 	AL_Signalbus.local_client_created.connect(_on_local_client_created)
 	AL_Signalbus._do_server_create.connect(_on_do_server_create)
+	AL_Signalbus._do_server_remove_client.connect(_on_do_server_remove_client)
 	AL_Signalbus._do_client_create.connect(_on_do_client_create)
 	pass # Replace with function body.
 
@@ -85,30 +86,45 @@ func add_player(id, team : String):
 
 
 ## Removes client network node. Close Connection and inform all Clients
-@rpc("authority")
+#@rpc("authority", "call_local")
 # ToDo: Seperate remove player on Host and Client
-# ToDo: Rename Func, _on_do_server_XXXX
+# ToDo: Rename Func, _on_do_server_remove_client
+#		maybe not as RPC()
 #		Add Signal for UI notification. To Remove entry from connected clientlist
-func remove_player(id):
-	return
-	@warning_ignore("unreachable_code")
-	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
-	if pnode != null:
-		pnode.queue_free()
-		var _player = AL_Signalbus.playernode.get_node_or_null(str(id))
-#		var pname = _player.get_node("ReferenceRect/PlayerName").text
+func _on_do_server_remove_client(id):
+	# Only allowed on Server
+	if not  multiplayer.is_server(): return
+
+
+#	if multiplayer.has_multiplayer_peer():
+	var _peers =  multiplayer.get_peers()
+	if id in _peers:
+		multiplayer.multiplayer_peer.disconnect_peer(id, true)
+#		var peers = multiplayer.get_peers()
+
+	var _player = AL_Globals.playernode.get_node_or_null(str(id))
+	if _player:
 		_player.queue_free()
+
+#	var pnode = %PlayersConnectedListTeamBlue.get_node_or_null(str(id))
+#	if pnode != null:
+#		pnode.queue_free()
+#		var pname = _player.get_node("ReferenceRect/PlayerName").text
 #		send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Blue".capitalize()], "{}"), false)
-	else:
-		pnode = %PlayersConnectedListTeamRed.get_node_or_null(str(id))
-		if (pnode != null):
-			pnode.queue_free()
-			var _player = AL_Signalbus.playernode.get_node_or_null(str(id))
+#	else:
+#		pnode = %PlayersConnectedListTeamRed.get_node_or_null(str(id))
+#		if (pnode != null):
+#			pnode.queue_free()
+#			var _player = AL_Signalbus.playernode.get_node_or_null(str(id))
 #			var pname = _player.get_node("ReferenceRect/PlayerName").text
 #			send_message.rpc(str(id), " ({} / {}) has leave the game".format([pname, "Red".capitalize()], "{}"), false)
-			_player.queue_free()
+#			_player.queue_free()
 	# send_message.rpc(str(id), " left the game", false)
 
+
+@rpc("call_local", "any_peer")
+func remove_client_player() -> void:
+	pass
 
 ## Load the Map on Server. Synced by MultiplayerSpawner Node
 @rpc("authority", "call_local")
@@ -126,6 +142,14 @@ func load_game():
 # ToDo:	Add Signal for Network Errorhandling, Displaying
 #		Client, Server; UI
 #####
+func _on_server_peer_disconnected(id : int) -> void:
+	# ToDo: Call remove connection on Server
+	#		call: _on_do_server_remove_client
+	AL_Signalbus._do_server_remove_client.emit(id)
+	# ToDo: Call remove client from UI, Server and Client
+	pass
+
+
 ## Called when local Server creation is done
 func _on_host_server_created() -> void:
 	# ToDo 	:	Show Lobby and Wait for Clients bevor starting
@@ -147,8 +171,8 @@ func _on_do_server_create():
 
 	multiplayer.multiplayer_peer = peer
 
-	multiplayer.peer_disconnected.connect(remove_player)
-	multiplayer.peer_connected.connect(player_joined)
+	multiplayer.peer_disconnected.connect(_on_server_peer_disconnected)
+	multiplayer.peer_connected.connect(player_joined)	#_on_server_peer_connected
 	print("Create Server success !")
 
 	AL_Signalbus.host_server_created.emit()
