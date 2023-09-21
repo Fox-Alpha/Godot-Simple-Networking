@@ -9,3 +9,4 @@ var playerdata : Dictionary = { "Team_Blue": {}, "Team_Red": {} }
 var playernode: Node
 var mapnode: Node
 var rootnode: Node
+var spawnrootnode: Node
