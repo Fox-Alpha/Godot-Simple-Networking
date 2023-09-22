@@ -37,7 +37,7 @@ func display_players_connected(node : Node):
 	var _plist = multiplayer.get_peers()
 
 	for _p in _plist:
-		var _peer : Node = AL_Globals.playernode.get_node_or_null("/root/Main/Network/Player/{0}".format([str(_p)]))
+		var _peer : Node = AL_Globals.playernode.get_node_or_null("{0}".format([str(_p)]))
 
 		if _peer == null: break
 

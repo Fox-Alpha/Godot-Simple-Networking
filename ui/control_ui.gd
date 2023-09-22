@@ -21,6 +21,18 @@ func _ready() -> void:
 #func _process(delta: float) -> void:
 #	pass
 
+func _input(event: InputEvent) -> void:
+	if %Menu.visible: return # If the starting menu is not visible it means we are in the game
+#	return
+#	@warning_ignore("unreachable_code")
+	if not multiplayer.is_server():
+		# Hold the Tab key to display connected players and press Enter to send a message
+		if Input.is_key_pressed(KEY_TAB):
+			%Lobby.display_players_connected(%PlayersConnectedListTeamBlue)
+			%Scoreboard.show()
+		else:
+			%Scoreboard.hide()
+
 
 func _on_host_server_created() -> void:
 	%Menu.hide()
