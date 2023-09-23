@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@export var team : Color
+@export var teamcolor : Color
+@export var teamname : String
 var multiplayerauthority : int = -1
 var player_is_server: bool = false
 
@@ -32,7 +33,7 @@ func _physics_process(_delta):
 
 
 func _on_tree_entered():
-	$ReferenceRect/TeamColor.color = team
+	$ReferenceRect/TeamColor.color = teamcolor
 	set_multiplayer_authority(str(name).to_int())
 	multiplayerauthority = str(name).to_int()
 
