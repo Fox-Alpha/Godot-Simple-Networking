@@ -51,7 +51,8 @@ func add_player(id, team : String):
 	var sp_rt_node : Node = AL_Globals.spawnrootnode.find_child(team.capitalize())
 	# ToDo: Errorhandling, when spawnnode not found
 	player_instance.name = str(id)
-	if multiplayer.is_server():
+	print("MP Auth: " + str(player_instance.get_multiplayer_authority()))
+	if multiplayer.is_server() and id == 1:
 		player_instance.get_node("ReferenceRect/PlayerName").text += " - HOST"
 #	player_instance.team = team
 
@@ -59,26 +60,31 @@ func add_player(id, team : String):
 
 	match team:
 		"blue":
-			player_instance.team = Color.DODGER_BLUE
+			player_instance.teamcolor = Color.DODGER_BLUE
 			player_instance.global_position =sp_rt_node.global_position
+			player_instance.teamname = team
 
-			AL_Globals.playernode.add_child(player_instance)
+			print("MP Auth 2: " + str(player_instance.get_multiplayer_authority()))
+#			AL_Globals.playernode.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.DODGER_BLUE
 		"red":
-			player_instance.team = Color.ORANGE_RED
+			player_instance.teamcolor = Color.ORANGE_RED
 			player_instance.global_position = sp_rt_node.global_position
+			player_instance.teamname = team
 
-			AL_Globals.playernode.add_child(player_instance)
+			print("MP Auth 2: " + str(player_instance.get_multiplayer_authority()))
+#			AL_Globals.playernode.add_child(player_instance)
 #			%SpawnPosition/Red.add_child(player_instance)
 #			player_instance.get_node("ReferenceRect/TeamColor").color = Color.ORANGE_RED
 		"host":
-
-			player_instance.team = Color.SEA_GREEN
+			player_instance.teamcolor = Color.SEA_GREEN
 			player_instance.global_position = sp_rt_node.global_position
+			player_instance.teamname = team
 
-			AL_Globals.playernode.add_child(player_instance)
 #			%SpawnPosition/Host.add_child(player_instance)
 
+	AL_Globals.playernode.add_child(player_instance)
+	print("MP Auth 2: " + str(player_instance.get_multiplayer_authority()))
 #	if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().has(id):
 #		_on_server_display_players_connected(team)
 		# "User {} is {}.".format([42, "Godot"], "{}")
