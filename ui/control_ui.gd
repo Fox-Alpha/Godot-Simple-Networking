@@ -27,6 +27,12 @@ func _input(_event: InputEvent) -> void:
 #	@warning_ignore("unreachable_code")
 	if not multiplayer.is_server():
 		# Hold the Tab key to display connected players and press Enter to send a message
+		if Input.is_key_pressed(KEY_TAB):
+#			%Scoreboard.display_players_connected_proxy()
+			%Scoreboard.show()
+		elif Input.is_action_just_released("ui_focus_next"):
+			%Scoreboard.hide()
+#TODO: check doubling
 		if Input.is_action_just_pressed("ui_focus_next"):
 			%Scoreboard.display_players_connected(%Scoreboard.get_node_or_null("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/PlayersConnectedListTeamRed"), "red")
 			%Scoreboard.display_players_connected(%Scoreboard.get_node_or_null("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/PlayersConnectedListTeamBlue"), "blue")

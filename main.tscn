@@ -40,6 +40,12 @@ offset_bottom = 0.0
 [node name="Lobby" parent="Control_UI" instance=ExtResource("4_tswso")]
 unique_name_in_owner = true
 layout_mode = 1
+anchors_preset = 5
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_top = 0.0
+offset_bottom = 182.0
+grow_vertical = 1
 
 [node name="Scoreboard" parent="Control_UI" instance=ExtResource("5_qiwcw")]
 unique_name_in_owner = true
@@ -51,7 +57,6 @@ grow_vertical = 0
 
 [node name="Menu" parent="Control_UI" instance=ExtResource("6_xmp4e")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 
 [node name="SendMessage" parent="Control_UI" instance=ExtResource("7_w36v2")]
